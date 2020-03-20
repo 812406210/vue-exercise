@@ -5,6 +5,8 @@
     <v-navigation></v-navigation>
     <v-content></v-content>
     <v-footer></v-footer>
+    <v-father></v-father>
+
 <!--    <router-view/>-->
   </div>
 </template>
@@ -15,6 +17,7 @@
   import navigation from './components/header/navigation';
   import content from './components/header/content';
   import footer from './components/header/footer';
+  import father from './components/transfervalue/father';
 
   export default {
   name: 'App',
@@ -24,6 +27,7 @@
     'v-navigation':navigation,
     'v-content':content,
     'v-footer':footer,
+    'v-father':father,
   }
 }
 </script>
