@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/contents/index'
 import Notbook from '@/components/contents/notbook'
-import Link from '@/components/contents/link'
+import Contact from '@/components/contents/contact'
 import Describe from '@/components/contents/describe'
 import Management from '@/components/contents/management'
 
@@ -21,9 +21,9 @@ export default new Router({
       component: Notbook
     },
     {
-      path: '/link',
-      name: 'Link',
-      component: Link
+      path: '/contact',
+      name: 'contact',
+      component: Contact
     },
     {
       path: '/describe',

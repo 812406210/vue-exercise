@@ -27,7 +27,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><router-link to="/index">博客园</router-link></li>
             <li><router-link to="/notbook">新随笔</router-link></li>
-            <li><router-link to="/link">联系</router-link></li>
+            <li><router-link to="/contact">联系</router-link></li>
             <li><router-link to="/describe">订阅</router-link></li>
             <li><router-link to="/management">管理</router-link></li>
           </ul>
