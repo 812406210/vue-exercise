@@ -1,5 +1,4 @@
 <template>
-
   <div class="safetyInfo">
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
 
@@ -59,21 +58,23 @@
           </div>
 
           <!-- 按钮触发模态框 -->
-          <a href="" data-toggle="modal" data-target="#lookModal">详情</a>
+          <a href="" data-toggle="modal" data-target="#lookModal" @click.prevent="getName(item.userName)">详情</a>
           <!-- 模态框（Modal） -->
           <div class="modal fade" id="lookModal" tabindex="-1" role="dialog" aria-labelledby="lookModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title" id="lookModalLabel">{{item.userName}}个人介绍</h4>
+                  <h4 class="modal-title" id="lookModalLabel">{{clickUserName}}个人介绍</h4>
                 </div>
                 <div class="modal-body">
                     <h1>
                       <p>给你来一个大的个人介绍...</p>
-                      <img :src="imgSrc">
+                      <div v-if="imgSrc">
+                        <img :src="imgSrc" style="width: 80px;height: 80px">
+                      </div>
                     </h1>
-                  <input type="file" id="people-export" ref="inputer" @change="fileUpload($event)"/>
+                  <input type="file" id="people-export" ref="inputer" @change="fileUpload($event)"  accept="image/jpg, image/jpeg, image/png"/>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -91,11 +92,13 @@
 </template>
 
 <script>
+const STORAGE_KEY = 'todos-vuejs'//定义常量保存键值
 
 export default {
   name: 'contact',
   data () {
     return {
+      clickUserName:'',
       picture:{},
       imgSrc:'',
       newUserName:'',
@@ -115,16 +118,47 @@ export default {
   },
   //勾子
   methods: {
+
+    fetch(){
+      return JSON.parse(window.localStorage.getItem(STORAGE_KEY)|| '[]');
+    },
+    save(items){
+      window.localStorage.setItem(STORAGE_KEY,JSON.stringify(items))
+    },
+    getName(name){
+      this.clickUserName = name;
+      this.imgSrc = this.fetch();
+    },
+
     fileUpload(event){
+      let files =  event.target.files[0];
+      //转码base64
+      let reader = new FileReader();
+      let imgFile;
+      reader.readAsDataURL(files);
+      reader.onload =  e => {
+        imgFile = e.target.result;
+        let arr = imgFile.split(",");
+        //这里的 picPath 'data:image/png;base64,'+ base64为编码字符串拼接形成图片的
+        this.imgSrc='data:image/png;base64,'+arr[1]
+        this.save(this.imgSrc)
+      }
+      this.fileUploadExtend(event)
+    },
+
+    fileUploadExtend(event){
+      console.log("上传的开始")
       this.picture = event.target.files[0]; //获取数据
       var formData = new FormData();
-      formData.append("flies", this.picture);
-      this.$http.post("http://localhost:8081/upload", {file:formData},{ credentials: false },{withCredentials:false},{
+      console.log("上传的内容："+this.picture)
+      formData.append("file", this.picture);
+      this.$http.post("http://localhost:8081/upload", formData,{
           headers: { "Content-Type": "multipart/form-data" }
         }).then(result=>{
           console.log(result.body)
         if(result.body.code === 200){
-            this.imgSrc = result.body.data
+          console.log("地址为："+result.body.data)
+            //this.imgSrc = this.picture
         }else{
           console.log("上传失败")
         }
