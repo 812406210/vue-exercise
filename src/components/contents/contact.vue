@@ -153,7 +153,7 @@ export default {
       var formData = new FormData();
       console.log("上传的内容："+this.picture)
       formData.append("file", this.picture);
-      this.$http.post("http://localhost:8081/upload", formData,{
+      this.$http.post("http://132.232.44.82:8081/upload", formData,{
           headers: { "Content-Type": "multipart/form-data" }
         }).then(result=>{
           console.log(result.body)
@@ -167,7 +167,7 @@ export default {
     },
 
     add(){
-      this.$http.post('http://localhost:8081/add',{
+      this.$http.post('http://132.232.44.82:8081/add',{
         userName:this.newUserName,
         phoneNumber:this.newphoneNumber,
         age:this.newAge,
@@ -180,7 +180,7 @@ export default {
     }
     ,
     del(id){
-      this.$http.get("http://localhost:8081/delById",{params:{id:id}}).then(result=>{
+      this.$http.get("http://132.232.44.82:8081/delById",{params:{id:id}}).then(result=>{
         console.log(result.body)
         this.getAllUser()
       })
@@ -189,13 +189,15 @@ export default {
       console.log("前aaa"+this.username+"ss"+this.sex)
       if(this.username !='' || this.sex != '') {
         console.log("后aaa"+this.username+"ss"+this.sex)
-        this.$http.post('http://localhost:8081/getUserByParam', {
+        this.$http.post('http://132.232.44.82:8081/getUserByParam', {
           userName: this.username,
           sex: this.sex
         }).then(result => {
           if (result.body.code === 200) {
             console.log(result.body.data.user)
             this.searchData = [result.body.data.user]
+            this.username =''
+            this.sex = ''
           } else {
             console.log("查询失败")
           }
@@ -206,7 +208,7 @@ export default {
       }
     },
     getAllUser(){
-      this.$http.get('http://localhost:8081/getUser').then(result=>{
+      this.$http.get('http://132.232.44.82:8081/getUser').then(result=>{
         console.log(result.body)
         if(result.body.code === 200){
           this.searchData = result.body.data.user
