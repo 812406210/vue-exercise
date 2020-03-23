@@ -118,10 +118,11 @@ export default {
   },
   //勾子
   methods: {
-
+    //获取浏览器缓存数据
     fetch(){
       return JSON.parse(window.localStorage.getItem(STORAGE_KEY)|| '[]');
     },
+    //将数据保存到浏览器中
     save(items){
       window.localStorage.setItem(STORAGE_KEY,JSON.stringify(items))
     },
